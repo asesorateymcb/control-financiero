@@ -6,13 +6,13 @@
     <title>ASESORATE - Plantilla Control Financiero Avanzada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Librería para exportar a Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Librería robusta para exportar a Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .header-asesorate { background-color: #0a192f; }
         .accent-asesorate { color: #64ffda; }
-        input:focus, select:focus { outline: none; ring: 2px; ring-color: #4f46e5; }
+        input:focus, select:focus { outline: none; ring: 2px; ring-color: #4f46e5; border-color: transparent; }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -20,15 +20,15 @@
     <!-- HEADER LOGO -->
     <div class="header-asesorate text-white p-6 rounded-t-xl flex flex-col md:flex-row justify-between items-center shadow-lg">
         <div class="text-center md:text-left mb-4 md:mb-0">
-            <h1 class="text-2xl font-bold tracking-tight">ASESORATE <span class="text-sm font-normal text-slate-400">| Control Financiero V2.0</span></h1>
+            <h1 class="text-2xl font-bold tracking-tight">ASESORATE <span class="text-sm font-normal text-slate-400">| Control Financiero V2.1</span></h1>
             <p class="text-xs text-slate-400 uppercase">Gestión Estratégica para MiPymes</p>
         </div>
         <div class="flex flex-col items-center md:items-end">
-            <button onclick="descargarExcel()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full font-bold text-sm transition-all transform hover:scale-105 flex items-center shadow-md">
+            <button onclick="descargarExcel()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full font-bold text-sm transition-all transform hover:scale-105 flex items-center shadow-md border-none cursor-pointer">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                DESCARGAR PARA EXCEL (.XLSX)
+                GENERAR Y DESCARGAR EXCEL (.XLSX)
             </button>
-            <p class="text-[10px] text-slate-500 mt-2 italic">C.P.C. Yessica Carrillo - CEO</p>
+            <p class="text-[10px] text-slate-500 mt-2 italic">Servicios de asesorias integrales para empresas E.I.R.L.</p>
         </div>
     </div>
 
@@ -55,66 +55,65 @@
             </div>
         </div>
 
-        <!-- SECCIÓN: PUNTO DE EQUILIBRIO (NUEVA) -->
+        <!-- SECCIÓN: PUNTO DE EQUILIBRIO -->
         <div class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
             <h3 class="font-bold text-slate-700 mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                Calculadora de Punto de Equilibrio
+                Calculadora de Punto de Equilibrio (Meta de Supervivencia)
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Costos Fijos Mensuales (S/)</label>
-                    <input type="number" id="pe-costos-fijos" value="3000" oninput="calcularPuntoEquilibrio()" class="w-full p-2 border rounded-md text-sm">
+                    <input type="number" id="pe-costos-fijos" value="3000" oninput="calcularPuntoEquilibrio()" class="w-full p-2 border border-slate-300 rounded-md text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Margen de Ganancia (%)</label>
-                    <input type="number" id="pe-margen" value="30" oninput="calcularPuntoEquilibrio()" class="w-full p-2 border rounded-md text-sm">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Margen Bruto de Ganancia (%)</label>
+                    <input type="number" id="pe-margen" value="30" oninput="calcularPuntoEquilibrio()" class="w-full p-2 border border-slate-300 rounded-md text-sm">
                 </div>
-                <div class="bg-indigo-600 text-white p-3 rounded-md text-center">
-                    <p class="text-[10px] uppercase font-bold opacity-80">Meta de Ventas Mínima</p>
+                <div class="bg-indigo-600 text-white p-3 rounded-md text-center shadow-lg">
+                    <p class="text-[10px] uppercase font-bold opacity-80">Ventas mínimas para no perder</p>
                     <p class="text-xl font-bold" id="pe-resultado">S/ 10,000.00</p>
                 </div>
             </div>
-            <p class="text-[10px] text-slate-400 mt-2 italic">* El Punto de Equilibrio indica cuánto debes vender para que tu utilidad sea cero (cubrir todos tus costos).</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
             
-            <!-- FORMULARIO DE REGISTRO MEJORADO -->
+            <!-- FORMULARIO DE REGISTRO -->
             <div class="lg:col-span-1 space-y-6">
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-700 mb-4">Nuevo Registro</h3>
+                    <h3 class="font-bold text-slate-700 mb-4">Nuevo Movimiento</h3>
                     <div class="space-y-3">
-                        <input type="text" id="desc" placeholder="Descripción" class="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500">
-                        <input type="text" id="ruc" placeholder="RUC Proveedor (Opcional)" class="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500">
-                        <select id="categoria" class="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" id="desc" placeholder="Descripción (Ej: Compra de mercadería)" class="w-full p-2 border border-slate-300 rounded-md text-sm">
+                        <input type="text" id="ruc" placeholder="RUC Proveedor (11 dígitos)" class="w-full p-2 border border-slate-300 rounded-md text-sm">
+                        <select id="categoria" class="w-full p-2 border border-slate-300 rounded-md text-sm">
                             <option value="Ventas">Ventas (Ingreso)</option>
-                            <option value="Servicios">Servicios Básicos</option>
-                            <option value="Planilla">Planilla / Sueldos</option>
-                            <option value="Marketing">Marketing y Pub.</option>
-                            <option value="Tributos">Impuestos / Tasas</option>
-                            <option value="Otros">Otros Gastos</option>
+                            <option value="Servicios">Servicios (Luz, Agua, Internet)</option>
+                            <option value="Planilla">Sueldos y Cargas Sociales</option>
+                            <option value="Marketing">Marketing y Publicidad</option>
+                            <option value="Tributos">Impuestos (IGV/Renta)</option>
+                            <option value="Otros">Gastos Varios</option>
                         </select>
-                        <select id="tipo" class="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500">
+                        <select id="tipo" class="w-full p-2 border border-slate-300 rounded-md text-sm">
                             <option value="ingreso">Ingreso (+)</option>
                             <option value="egreso">Egreso (-)</option>
                         </select>
-                        <input type="number" id="monto" placeholder="Monto (S/)" class="w-full p-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500">
-                        <button onclick="agregarFila()" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-md hover:bg-indigo-700 transition shadow-md">Registrar Movimiento</button>
+                        <input type="number" id="monto" placeholder="Monto (S/)" class="w-full p-2 border border-slate-300 rounded-md text-sm">
+                        <button onclick="agregarFila()" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-md hover:bg-indigo-700 transition shadow-md border-none cursor-pointer">Registrar en Tabla</button>
                     </div>
                 </div>
 
                 <div class="bg-emerald-50 p-6 rounded-xl border border-emerald-100">
-                    <h3 class="font-bold text-emerald-800 mb-2 italic">Tip de Yessica:</h3>
+                    <h3 class="font-bold text-emerald-800 mb-2 italic">Tip de Yessica Carrillo:</h3>
                     <p class="text-xs text-emerald-700 leading-relaxed">
-                        "Registrar el <b>RUC</b> te ayudará a conciliar tus gastos con el reporte de SUNAT a fin de mes. ¡No pierdas el crédito fiscal!"
+                        "Un negocio sin control es un barco sin brújula. Registrar el RUC hoy te evitará multas con SUNAT mañana."
                     </p>
                 </div>
             </div>
 
-            <!-- TABLA DE MOVIMIENTOS MEJORADA -->
+            <!-- TABLA DE DATOS -->
             <div class="lg:col-span-3 overflow-x-auto">
-                <h3 class="font-bold text-slate-700 mb-4">Libro Auxiliar de Caja y Bancos</h3>
+                <h3 class="font-bold text-slate-700 mb-4">Detalle de Movimientos (Auxiliar de Caja)</h3>
                 <table id="tabla-datos" class="w-full text-left text-xs border-collapse bg-white">
                     <thead class="bg-slate-100 text-slate-600 border-b">
                         <tr>
@@ -128,40 +127,35 @@
                     </thead>
                     <tbody id="tabla-body" class="text-slate-700">
                         <tr class="border-b">
-                            <td class="p-3">01/04/2026</td>
+                            <td class="p-3">09/04/2026</td>
                             <td class="p-3">-</td>
-                            <td class="p-3">Saldo Inicial</td>
+                            <td class="p-3">Saldo Apertura</td>
                             <td class="p-3">Ventas</td>
                             <td class="p-3 font-bold text-blue-600">Ingreso</td>
-                            <td class="p-3 text-right">2500.00</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="p-3">03/04/2026</td>
-                            <td class="p-3">20123456789</td>
-                            <td class="p-3">Alquiler Oficina</td>
-                            <td class="p-3">Servicios</td>
-                            <td class="p-3 font-bold text-red-600">Egreso</td>
-                            <td class="p-3 text-right">1200.00</td>
+                            <td class="p-3 text-right">5000.00</td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="p-4 bg-slate-50 text-center text-slate-400 text-[10px] mt-2 border-t border-slate-200">
+                    Propiedad de ASESORATE | RUC 20606148811
+                </div>
             </div>
         </div>
 
-        <!-- FOOTER / CTA -->
-        <div class="mt-12 bg-slate-900 p-6 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 border-t-4 border-emerald-400">
-            <div class="max-w-xl">
-                <h4 class="text-lg font-bold mb-1 accent-asesorate">¿Deseas una evaluación de tu RUC?</h4>
-                <p class="text-slate-400 text-xs">
-                    No te limites a registrar. En **ASESORATE** analizamos tus compras y ventas para optimizar tu carga tributaria legalmente. ¡Contáctanos!
+        <!-- SECCIÓN PREMIUM ADAPTADA -->
+        <div class="mt-12 bg-slate-900 p-8 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="max-w-2xl text-center md:text-left">
+                <h4 class="text-xl font-bold mb-2 accent-asesorate underline decoration-emerald-500">¿Operas bajo el PAQUETE PREMIUM?</h4>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Clientes estratégicos como <strong>MANANTIAL TECNOLOGICO E.I.R.L.</strong> reciben este reporte bajo normas IFRS/NIIF de manera automática y con planeamiento tributario anual incluido.
                 </p>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4 bg-white/10 p-5 rounded-2xl border border-white/20 w-full md:w-auto">
                 <div class="text-right">
-                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Atención Inmediata</p>
-                    <p class="text-lg font-bold accent-asesorate">TAX-LINE WHATSAPP</p>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Soporte Estratégico</p>
+                    <p class="text-lg font-bold">TAX-LINE WHATSAPP</p>
                 </div>
-                <div class="bg-emerald-500 p-3 rounded-full text-slate-900">
+                <div class="bg-emerald-400 text-slate-900 p-3 rounded-full shadow-lg">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
                 </div>
             </div>
@@ -169,16 +163,16 @@
     </div>
 
     <script>
-        let totalIngresos = 2500;
-        let totalEgresos = 1200;
+        let totalIngresos = 5000;
+        let totalEgresos = 0;
 
         function actualizarKpis() {
             document.getElementById('total-ingresos').innerText = `S/ ${totalIngresos.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             document.getElementById('total-egresos').innerText = `S/ ${totalEgresos.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             document.getElementById('saldo-caja').innerText = `S/ ${(totalIngresos - totalEgresos).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             
-            // Proyección básica de renta (ejemplo 1.5% sobre utilidad)
             const utilidad = totalIngresos - totalEgresos;
+            // Proyección de renta 1.5% para el régimen Mype
             const renta = utilidad > 0 ? utilidad * 0.015 : 0;
             document.getElementById('proyeccion-renta').innerText = `S/ ${renta.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             
@@ -188,7 +182,6 @@
         function calcularPuntoEquilibrio() {
             const fijos = parseFloat(document.getElementById('pe-costos-fijos').value) || 0;
             const margen = (parseFloat(document.getElementById('pe-margen').value) || 0) / 100;
-            
             const meta = margen > 0 ? fijos / margen : 0;
             document.getElementById('pe-resultado').innerText = `S/ ${meta.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
         }
@@ -201,7 +194,7 @@
             const monto = parseFloat(document.getElementById('monto').value);
 
             if (!desc || isNaN(monto)) {
-                alert("Por favor, ingresa descripción y monto.");
+                alert("Atención: Ingrese descripción y monto válido.");
                 return;
             }
 
@@ -215,7 +208,7 @@
                 <td class="p-3">${ruc}</td>
                 <td class="p-3">${desc}</td>
                 <td class="p-3">${cat}</td>
-                <td class="p-3 font-bold ${tipo === 'ingreso' ? 'text-blue-600' : 'text-red-600'}">${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</td>
+                <td class="p-3 font-bold ${tipo === 'ingreso' ? 'text-blue-600' : 'text-red-600'}">${tipo.toUpperCase()}</td>
                 <td class="p-3 text-right">${monto.toFixed(2)}</td>
             `;
 
@@ -223,20 +216,28 @@
             else totalEgresos += monto;
 
             actualizarKpis();
-            
-            // Limpiar campos
             document.getElementById('desc').value = '';
             document.getElementById('ruc').value = '';
             document.getElementById('monto').value = '';
         }
 
         function descargarExcel() {
-            const tabla = document.getElementById('tabla-datos');
-            const libro = XLSX.utils.table_to_book(tabla, {sheet: "Control Financiero ASESORATE"});
-            XLSX.writeFile(libro, `Control_Financiero_V2_ASESORATE.xlsx`);
+            try {
+                const table = document.getElementById('tabla-datos');
+                const wb = XLSX.utils.table_to_book(table, { sheet: "Flujo de Caja ASESORATE" });
+                
+                // Nombre del archivo profesional
+                const filename = `Control_Financiero_ASESORATE_2026.xlsx`;
+                
+                // Descarga directa
+                XLSX.writeFile(wb, filename);
+            } catch (error) {
+                console.error("Error al exportar:", error);
+                alert("Hubo un error al generar el archivo. Inténtelo desde una laptop.");
+            }
         }
 
-        // Inicializar cálculos
+        // Ejecución inicial
         actualizarKpis();
     </script>
 </body>
